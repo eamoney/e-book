@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import './assets/styles/global.scss'
 import './assets/fonts/daysOne.css'
+import './assets/styles/icon.css'
 
 Vue.config.productionTip = false
 

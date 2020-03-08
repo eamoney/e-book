@@ -50,3 +50,7 @@ vuex：
 
 通过rendition使用触摸屏事件 需要将epub版本降到0.3.71
 
+标题栏和菜单栏的隐藏显示是通过使用vue动画
+1.用transition包裹组件 设置name属性
+2.通过v-enter v-enter-to v-enter-active设置进入时的动画 将v换成name
+3.设置离开时的动画

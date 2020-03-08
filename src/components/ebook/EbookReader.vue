@@ -23,7 +23,7 @@ export default {
   components: {
   },
   computed: {
-    ...mapGetters(['fileName'])
+    ...mapGetters(['fileName', 'menuVisible'])
   },
   methods: {
     initEpub () {
@@ -46,8 +46,10 @@ export default {
         const time = e.timeStamp - this.touchStartTime
         if (time < 500 && offsetX > 40){
           this.prevPage()
+          this.$store.dispatch('setMenuVisible', false)
         } else if (time < 500 && offsetX < -40){
           this.nextPage()
+          this.$store.dispatch('setMenuVisible', false)
         } else {
           this.toggleTitleAndMenu()
         }
@@ -65,7 +67,9 @@ export default {
         this.rendition.next()
       }
     },
-    toggleTitleAndMenu () {}
+    toggleTitleAndMenu () {
+      this.$store.dispatch('setMenuVisible', !this.menuVisible)
+    }
   },
   mounted () {
     const fileName = this.$route.params.fileName.split('|').join('/')
@@ -75,3 +79,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+@import '../../assets/styles/global';
+ .ebook-reader{
+ }
+</style>
