@@ -15,7 +15,9 @@ export default {
   data () {
     return {
       book: null,
-      rendition: null
+      rendition: null,
+      touchStartX: 0,
+      touchStartTime: 0
     }
   },
   components: {
@@ -26,7 +28,7 @@ export default {
   methods: {
     initEpub () {
       // 根据fileName获取相应的url地址
-      const url = 'http://192.168.0.100:8088/epub/' + this.fileName + '.epub'
+      const url = 'http://127.0.0.1:8088/epub/' + this.fileName + '.epub'
       this.book = new Epub(url)
       console.log(url, this.book)
       this.rendition = this.book.renderTo('read', {
@@ -35,7 +37,35 @@ export default {
         method: 'default'
       })
       this.rendition.display()
-    }
+      this.rendition.on('touchstart', e => {
+        this.touchStartX = e.changedTouches[0].clientX
+        this.touchStartTime = e.timeStamp
+      })
+      this.rendition.on('touchend', e => {
+        const offsetX = e.changedTouches[0].clientX - this.touchStartX
+        const time = e.timeStamp - this.touchStartTime
+        if (time < 500 && offsetX > 40){
+          this.prevPage()
+        } else if (time < 500 && offsetX < -40){
+          this.nextPage()
+        } else {
+          this.toggleTitleAndMenu()
+        }
+        e.preventDefault()
+        e.stopPropagation()
+      })
+    },
+    prevPage () {
+      if (this.rendition){
+        this.rendition.prev()
+      }
+    },
+    nextPage () {
+      if (this.rendition){
+        this.rendition.next()
+      }
+    },
+    toggleTitleAndMenu () {}
   },
   mounted () {
     const fileName = this.$route.params.fileName.split('|').join('/')

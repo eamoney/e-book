@@ -48,3 +48,5 @@ vuex：
     ...mapGetters(['属性名'])
 }
 
+通过rendition使用触摸屏事件 需要将epub版本降到0.3.71
+
