@@ -1,6 +1,6 @@
 <template>
   <transition name="slide-down">
-    <div class="titile-wrapper" v-show="menuVisible">
+    <div class="title-wrapper" v-show="menuVisible">
         <div class="left">
           <span class="icon-back" @click="back"></span>
         </div>
@@ -34,7 +34,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../assets/styles/global.scss';
-  .titile-wrapper{
+  .title-wrapper{
   position: absolute;
   top:0;
   left:0;

@@ -88,8 +88,37 @@ export const ebookMixin = {
 使用web-storage-cache 设置离线存储
 定义好了多个基础方法 再定义设置book的方法 将与book有关的数据 集成到一个book对象下 
 
+export function setBookObject (fileName, key, value) {
+  let book = getLocalStorage(`${fileName}-info`)
+  if (!book){
+    book = {}
+  }
+  book[key] = value
+  setLocalStorage(`${fileName}-info`, book)
+}
 
+export function getBookObject (fileName, key) {
+  let book = getLocalStorage(`${fileName}-info`)
+  if (book){
+    return book[key]
+  } else {
+    return null
+  }
+}
 
+支持国际化 v-i18n 在src目录下的lang
+
+npm i --save v-i18n
+
+设置主题：
+通过rendition.themes.select(them.name)
+全局样式的改变：通过动态切换css文件 在服务器中的css文件中 统一都使用了!impotant
+这里注意每次添加link标签的时候 要删除之前添加的带有全局样式的link标签
+
+实现进度：
+获取cfi 通过rendition渲染
+      const cfi = this.currentBook.locations.cfiFromPercentage(this.progress / 10)
+      this.currentBook.rendition.display(cfi)
 
 
 
