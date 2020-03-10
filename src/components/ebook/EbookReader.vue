@@ -7,14 +7,14 @@
 
 <script>
 // @ is an alias to /src
-import { mapGetters } from 'vuex'
+import { ebookMixin } from '../../utils/mixin.js'
 import Epub from 'epubjs'
 global.epub = Epub
 export default {
   name: 'EbookReader',
+  mixins: [ebookMixin],
   data () {
     return {
-      book: null,
       rendition: null,
       touchStartX: 0,
       touchStartTime: 0
@@ -22,14 +22,13 @@ export default {
   },
   components: {
   },
-  computed: {
-    ...mapGetters(['fileName', 'menuVisible'])
-  },
+
   methods: {
     initEpub () {
       // 根据fileName获取相应的url地址
       const url = 'http://127.0.0.1:8088/epub/' + this.fileName + '.epub'
       this.book = new Epub(url)
+      this.setCurrentBook(this.book)
       console.log(url, this.book)
       this.rendition = this.book.renderTo('read', {
         width: innerWidth,
@@ -46,10 +45,10 @@ export default {
         const time = e.timeStamp - this.touchStartTime
         if (time < 500 && offsetX > 40){
           this.prevPage()
-          this.$store.dispatch('setMenuVisible', false)
+          this.hideTitleMenu()
         } else if (time < 500 && offsetX < -40){
           this.nextPage()
-          this.$store.dispatch('setMenuVisible', false)
+          this.toggleTitleAndMenu()
         } else {
           this.toggleTitleAndMenu()
         }
@@ -68,12 +67,18 @@ export default {
       }
     },
     toggleTitleAndMenu () {
-      this.$store.dispatch('setMenuVisible', !this.menuVisible)
+      if (this.menuVisible){
+        this.setSettingVisible(-1)
+      }
+      this.setMenuVisible(!this.menuVisible)
+    },
+    hideTitleMenu (){
+      this.setMenuVisible(false)
     }
   },
   mounted () {
     const fileName = this.$route.params.fileName.split('|').join('/')
-    this.$store.dispatch('setFileName', fileName).then(() => {
+    this.setFileName(fileName).then(() => {
       this.initEpub()
     })
   }

@@ -10,6 +10,18 @@ $ratio: 375 / 10;
   align-items: center;
 }
 
+@mixin left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@mixin right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 .icon{
   color:#333;
   font-size: px2rem(20);

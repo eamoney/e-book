@@ -1,3 +1,4 @@
+@import './mixin.scss';
 .slide-down-enter, .slide-down-leave-to {
   transform: translate3d(0, -100%, 0);
 }
@@ -9,5 +10,5 @@
   transition: all .3s linear;   
 }
 .slide-up-enter, .slide-up-leave-to {
-    transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, px2rem(138), 0);
   }

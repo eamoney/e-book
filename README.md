@@ -54,3 +54,24 @@ vuex：
 1.用transition包裹组件 设置name属性
 2.通过v-enter v-enter-to v-enter-active设置进入时的动画 将v换成name
 3.设置离开时的动画
+
+mixin机制：解决了每个组件都混入相同代码段导致维护性差，组件之前的耦合度高的问题
+1.将mapGetters mapAcitons放入新建的mixin.js文件
+2.通过import方式引入
+3.通过vue的minxis：[] 将混入的内容放入
+import { mapGetters, mapActions } from 'vuex'
+
+export const ebookMixin = {
+  computed: {
+    ...mapGetters([
+      'fileName',
+      'menuVisible'])
+  },
+  methods: {
+    ...mapActions([
+      'setFileName',
+      'setMenuVisible'
+    ])
+  }
+}
+实现了组件间的解耦和复用

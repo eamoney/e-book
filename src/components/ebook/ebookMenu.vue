@@ -1,27 +1,42 @@
 <template>
-  <transition name="slide-up">
-    <div class="menu-wrapper" v-show="menuVisible">
-      <div class="icon-wrapper">
-        <div class="icon-menu icon"></div>
-       </div>
-      <div class="icon-wrapper">
-        <div class="icon-progress icon"></div>
-      </div>
-      <div class="icon-wrapper">
-        <div class="icon-bright icon"></div>
-      </div>
-      <div class="icon-wrapper">
-        <div class="icon-a icon">A</div>
-      </div>
+  <div>
+    <div class="menu-bar">
+      <transition name="slide-up">
+        <div class="menu-wrapper" v-show="menuVisible" :class="{'hide-box-shadow': !menuVisible || settingVisible >= 0}">
+          <div class="icon-wrapper">
+            <span class="icon-menu" @click="showSetting(3)"></span>
+          </div>
+          <div class="icon-wrapper">
+            <span class="icon-progress" @click="showSetting(2)"></span>
+          </div>
+          <div class="icon-wrapper">
+            <span class="icon-bright" @click="showSetting(1)"></span>
+          </div>
+          <div class="icon-wrapper">
+            <span class="icon-a" @click="showSetting(0)">A</span>
+          </div>
+        </div>
+      </transition>
     </div>
-  </transition>
+    <ebook-setting-font/>
+    <ebook-setting-font-popup/>
+  </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import EbookSettingFontPopup from './EbookSettingFontPopup'
+import EbookSettingFont from './EbookSettingFone'
+import { ebookMixin } from '../../utils/mixin.js'
 export default {
-  computed: {
-    ...mapGetters(['menuVisible'])
+  mixins: [ebookMixin],
+  components: {
+    EbookSettingFont,
+    EbookSettingFontPopup
+  },
+  methods: {
+    showSetting (key){
+      this.setSettingVisible(key)
+    }
   }
 }
 </script>
@@ -29,6 +44,10 @@ export default {
 <style lang="scss" scoped>
 @import '../../assets/styles/global';
 .menu-wrapper{
+  &.hide-box-shadow{
+    box-shadow: none;
+  }
+  z-index:101;
   position: absolute;
   bottom:0;
   left:0;
@@ -37,6 +56,7 @@ export default {
   background-color: white;
   box-shadow: 0 px2rem(-8) px2rem(8) rgba(0,0,0, .15);
   display: flex;
+  font-size: px2rem(20);
   .icon-wrapper{
     flex:1;
     @include center;
