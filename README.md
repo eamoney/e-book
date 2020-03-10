@@ -75,3 +75,23 @@ export const ebookMixin = {
   }
 }
 实现了组件间的解耦和复用
+
+设置字体样式是一个难点 因为epub最外层是一个额iframe 实现字体样式的设置
+需要将样式文件 引入到iframe里面的epub-view
+      this.rendition.hooks.content.register(content => {
+        contents.addStylesheet(url)
+      })
+需要将字体样式文件放入服务器 生成url链接 通过上述方法引入
+
+配置环境变量-使在不同环境下开发 创建env.development
+
+使用web-storage-cache 设置离线存储
+定义好了多个基础方法 再定义设置book的方法 将与book有关的数据 集成到一个book对象下 
+
+
+
+
+
+
+
+

@@ -9,6 +9,12 @@
 // @ is an alias to /src
 import { ebookMixin } from '../../utils/mixin.js'
 import Epub from 'epubjs'
+import { 
+  getFontFamily,
+  saveFontFamily,
+  getFontSize,
+  saveFontSize
+} from '../../utils/localStorage.js'
 global.epub = Epub
 export default {
   name: 'EbookReader',
@@ -24,6 +30,24 @@ export default {
   },
 
   methods: {
+    initFontSize () {
+      let fontSize = getFontSize(this.fileName)
+      if (!fontSize) {
+        saveFontSize(this.fileName, this.defaultFontSize)
+      } else {
+        this.rendition.themes.fontSize(fontSize)
+        this.setDefaultFontSize(fontSize)
+      }
+    },
+    initFontFamily () {
+      let font = getFontFamily(this.fileName)
+      if (!font) {
+        saveFontFamily(this.fileName, this.defaultFontFamily)
+      } else {
+        this.rendition.themes.font(font)
+        this.setDefaultFontFamily(font)
+      }
+    },
     initEpub () {
       // 根据fileName获取相应的url地址
       const url = 'http://127.0.0.1:8088/epub/' + this.fileName + '.epub'
@@ -35,7 +59,10 @@ export default {
         height: innerHeight,
         method: 'default'
       })
-      this.rendition.display()
+      this.rendition.display().then(() => {
+        this.initFontSize()
+        this.initFontFamily()
+      })
       this.rendition.on('touchstart', e => {
         this.touchStartX = e.changedTouches[0].clientX
         this.touchStartTime = e.timeStamp
@@ -55,6 +82,14 @@ export default {
         e.preventDefault()
         e.stopPropagation()
       })
+      this.rendition.hooks.content.register(contents => {
+        Promise.all([
+          contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/daysOne.css`),
+          contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/cabin.css`),
+          contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/montserrat.css`),
+          contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/tangerine.css`)
+        ]).then(() => {})
+      })
     },
     prevPage () {
       if (this.rendition){
@@ -69,11 +104,14 @@ export default {
     toggleTitleAndMenu () {
       if (this.menuVisible){
         this.setSettingVisible(-1)
+        this.setFontFamilyVisible(false)
       }
       this.setMenuVisible(!this.menuVisible)
     },
     hideTitleMenu (){
       this.setMenuVisible(false)
+      this.setSettingVisible(-1)
+      this.setFontFamilyVisible(false)
     }
   },
   mounted () {
