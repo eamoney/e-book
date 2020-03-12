@@ -9,13 +9,15 @@
 // @ is an alias to /src
 import { ebookMixin } from '../../utils/mixin.js'
 import Epub from 'epubjs'
+import { flatten } from '../../utils/book.js'
 import { 
   getFontFamily,
   saveFontFamily,
   getFontSize,
   saveFontSize,
   getTheme,
-  saveTheme
+  saveTheme,
+  getLocation
 } from '../../utils/localStorage.js'
 global.epub = Epub
 export default {
@@ -68,7 +70,8 @@ export default {
         height: innerHeight,
         method: 'default'
       })
-      this.rendition.display().then(() => {
+      const location = getLocation(this.fileName)
+      this.display(location, () => {
         this.initFontSize()
         this.initFontFamily()
         this.initTheme()
@@ -104,6 +107,28 @@ export default {
         e.stopPropagation()
       })
     },
+    parseBook () {
+      this.book.loaded.cover.then(cover => {
+        this.book.archive.createUrl(cover).then(url => {
+          console.log(url)
+          this.setCover(url)
+        })
+      })
+      this.book.loaded.metadata.then(metadata => {
+        this.setMetadata(metadata)
+      })
+      this.book.loaded.navigation.then(nav => {
+        const navItem = flatten(nav.toc)
+        function find (item, level = 0) {
+          return !item.parent ? level : find(navItem.filter(parentItem => 
+            parentItem.id === item.parent)[0], ++level)
+        }
+        navItem.forEach(item => {
+          item.level = find(item)
+        })
+        this.setNavigation(navItem)
+      })  
+    }, 
     initEpub () {
       // 根据fileName获取相应的url地址
       const url = `${process.env.VUE_APP_RES_URL}/epub/` + this.fileName + '.epub'
@@ -112,21 +137,28 @@ export default {
       this.setCurrentBook(this.book)
       this.initRendition()
       this.initGesture()
-      // ready是在book全部解析之后才会调用 
+      this.parseBook()
+      // ready是在book全部解析之后才会调用 分页算法
       this.book.ready.then(() => {
         return this.book.locations.generate(750 * (window.innerWidth / 375) * (getFontSize(this.fileName) / 16))
       }).then(location => {
         this.setBookAvailable(true)
+        // 由于分页算法的缘故 可能没有分页完成 已经刷新 使得不到progess 所以在这再次调用progress
+        this.refreshLocation()
       })
     },
     prevPage () {
       if (this.rendition){
-        this.rendition.prev()
+        this.rendition.prev().then(() => {
+          this.refreshLocation()
+        })
       }
     },
     nextPage () {
       if (this.rendition){
-        this.rendition.next()
+        this.rendition.next().then(() => {
+          this.refreshLocation()
+        })
       }
     },
     toggleTitleAndMenu () {
@@ -135,11 +167,6 @@ export default {
         this.setFontFamilyVisible(false)
       }
       this.setMenuVisible(!this.menuVisible)
-    },
-    hideTitleMenu (){
-      this.setMenuVisible(false)
-      this.setSettingVisible(-1)
-      this.setFontFamilyVisible(false)
     }
   },
   mounted () {

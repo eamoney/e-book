@@ -22,6 +22,7 @@
     <ebook-setting-font-popup/>
     <ebook-setting-theme/>
     <ebook-setting-progress/>
+    <ebook-slide/>
   </div>
 </template>
 
@@ -31,13 +32,15 @@ import EbookSettingFont from './EbookSettingFone.vue'
 import { ebookMixin } from '../../utils/mixin.js'
 import EbookSettingTheme from '../../components/ebook/EbookSettingTheme.vue'
 import EbookSettingProgress from '../../components/ebook/EbookSettingProgress.vue'
+import EbookSlide from '../../components/ebook/EbookSlide/EbookSlide'
 export default {
   mixins: [ebookMixin],
   components: {
     EbookSettingFont,
     EbookSettingFontPopup,
     EbookSettingTheme,
-    EbookSettingProgress
+    EbookSettingProgress,
+    EbookSlide
   },
   methods: {
     showSetting (key){
@@ -48,7 +51,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/styles/global';
+@import '../../assets/styles/global.scss';
 .menu-wrapper{
   &.hide-box-shadow{
     box-shadow: none;

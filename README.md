@@ -120,7 +120,64 @@ npm i --save v-i18n
       const cfi = this.currentBook.locations.cfiFromPercentage(this.progress / 10)
       this.currentBook.rendition.display(cfi)
 
+每次进入前通过getLocation 获取当前的位置stratcfi
+再次通过封装好的refreshLocation 刷新当前的位置
 
+目录的实现： 通过vue的动态组件实现
+<component :is="component"></component>
 
+使用transition动画的叠加效果
+  <transition name="fade">
+    <div class="slide-content-wrapper" v-show=" menuVisible && settingVisible === 3">
+      <transition name="slide-right" >
+        <div class="content" v-if="settingVisible === 3">
+          <div class="content-page-wrapper">
+            <div class="content-page"></div>  
+            <div class="content-page-tab"></div>
+          </div>  
+        </div>
+      </transition>
+      <div class="content-bg" @click=hide()></div>
+    </div>
+  </transition>  
+
+消除空行带来的间距： font-size：0
+实现多行隐藏省略号
+        -webkit-box-orient: vertical; --指定方向
+        -webkit-line-clamp: 2; --指定行数
+        line-height: px2rem(16); --消息下一行文字的影响
+        white-space: normal; --指定换行
+        overflow: hidden; 
+        text-overflow: ellipsis;
+        word-break: keep-all; --指定一定要是一个英文单词才换行 相反的： break-all
+
+目录结构的实现 需要把它变成一维数组
+运用到递归的算法 运用[].concat(...[1,2]) 做一个数组的集成
+export function flatten (array) {
+  return   [].concat(array.map(item=>[].concat(item,...item.subitems))))
+}
+
+ -webkit-overflow-scrolling: touch;解决移动端卡顿
+ 实现二级目录的缩进也很简单 通过之前的level去判断
+ 1.动态绑定:style="contentItemStyle(item)"     
+ 2.return {
+        marginLeft: `${px2rem(item.level * 15)}rem`
+      }
+
+实现全文收索加收索高亮：
+ search () {
+      if (this.searchText && this.searchText.length > 0) {
+        this.doSearch('added').then(res => {
+          this.searchList = res
+          this.searchList.map(item => { 
+            item.excerpt = item.excerpt.replace(this.searchText, 
+          `<span class="content-search-text">${this.searchText}</span>`)
+            return item 
+          }
+          )
+        })
+      }
+    },
+还要使用 v-html 代替 {{}} 否则元素会被过滤掉 变成纯文本
 
 

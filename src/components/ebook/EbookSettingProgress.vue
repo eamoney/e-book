@@ -3,7 +3,7 @@
       <div class="setting-wrapper" v-show="menuVisible && settingVisible === 2">
         <div class="setting-progress" >
           <span class="read-time-wrapper">
-            <span class="read-time-text">111</span>
+            <span class="read-time-text">{{getReadTimeText()}}</span>
             <span class="icon-forward"></span>
           </span>
           <div class="progress-wrapper">
@@ -33,17 +33,19 @@
 
 <script>
 import { ebookMixin } from '../../utils/mixin.js'
+
 export default {
   mixins: [ebookMixin],
   computed: {
     getSectionName () {
-      if (this.section) {
-        const sectionInfo = this.currentBook.section(this.section)
-        if (sectionInfo && sectionInfo.href) {
-          return this.currentBook.navigation.get(sectionInfo.href).label
-        }
-      }
-      return ''
+      // if (this.section) {
+      //   const sectionInfo = this.currentBook.section(this.section)
+      //   if (sectionInfo && sectionInfo.href && this.currentBook && this.currentBook.navigation) {
+      //     return this.currentBook.navigation.get(sectionInfo.href).label
+      //   }
+      // }
+      // return ''
+      return this.section ? this.navigation[this.section].label : ''
     }
   },
   methods: {
@@ -73,7 +75,7 @@ export default {
     },
     displayProgress () {
       const cfi = this.currentBook.locations.cfiFromPercentage(this.progress / 100)
-      this.currentBook.rendition.display(cfi)
+      this.display(cfi)
     },
     updateProgressBg () {
       this.$refs.progress.style.backgroundSize = `${this.progress}% 100%`
@@ -81,18 +83,8 @@ export default {
     displaySection () {
       const sectionInfo = this.currentBook.section(this.section)
       if (sectionInfo && sectionInfo.href) {
-        this.currentBook.rendition.display(sectionInfo.href).then(() => {
-          this.refreshLocation()
-        })
+        this.display(sectionInfo.href)
       }
-    },
-    refreshLocation () {
-      const currentLocation = this.currentBook.rendition.currentLocation()
-      if (currentLocation.start.cfi) {
-        const progress = this.currentBook.locations.percentageFromCfi(currentLocation.start.cfi)     
-        this.setProgress(Math.floor(progress * 100))  
-      }
-      
     }
   },
   updated () {
