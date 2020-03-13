@@ -1,4 +1,4 @@
-<!--  -->
+<!-- 实现目录加载时候的动画 -->
 <template>
   <div class="ebook-loading">
     <div class="ebook-loading-wrapper">
