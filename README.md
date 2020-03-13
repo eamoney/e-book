@@ -180,4 +180,34 @@ export function flatten (array) {
     },
 还要使用 v-html 代替 {{}} 否则元素会被过滤掉 变成纯文本
 
+---加载动画的实现： 参考loading组件
+---书签的实现
+  书签的拖拽方法的实现： 因为epubjs里面并没有touchmove这个方法 所以这里需要用原生的vue方法实现
+  构建一个蒙层 绑定click touchmove touchend事件
+  touchmove事件之中监听移动的距离 offsetY 实现拖拽
+  touchend事件之中 将offetY和第一次触摸的点置为0
+    watch: {
+    offsetY (v) {
+      if (!this.menuVisible && this.bookAvailable) {
+        if (v > 0) {
+          this.move(v)
+        } else if (v === 0){
+          this.restore()
+        }
+      }
+    }
+  },
+  --书签组件的实现： 通过css3的border属性
+
+  --书签总共有4个状态
+    处于第三状态时 需要将书签添加
+    :style=" ifFixed ? fixedStyle : {}"
+        fixedStyle () {
+      return {
+        position: 'fixed',
+        top: 0,
+        right: `${(window.innerWidth - this.$refs.bookmark.clientWidth) / 2}`
+      }
+    }
+
 

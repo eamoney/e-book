@@ -21,8 +21,12 @@
           <img class="slide-contents-book-img" :src="cover">
       </div>
       <div class="slide-contents-book-info-wrapper">
-          <div class="slide-contents-book-title">{{metadata.title}}</div>
-          <div class="slide-contents-book-author">{{metadata.creator}}</div>
+          <div class="slide-contents-book-title">
+            <span class="slide-contents-book-title-text">{{metadata.title}}</span>
+          </div>
+          <div class="slide-contents-book-author">
+            <span class="slide-contents-book-author-text">{{metadata.creator}}</span>
+          </div>
       </div>
       <div class="slide-contents-book-progress-wrapper">
           <div class="slide-content-book-progress">
@@ -185,21 +189,21 @@ export default {
       box-sizing: border-box;
       .slide-contents-book-title{
         //375*0.85=318.75-30-20-45-70=153.75
-        width: px2rem(153.75);
+        // width: px2rem(153.75);
         font-size: px2rem(14);
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        line-height: px2rem(16);
-        white-space: normal;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        word-break: keep-all;
+        @include left;
+        .slide-contents-book-title-text{
+          @include ellipsis2(3);
+        }
       }
       .slide-contents-book-author{
-        width: px2rem(153.75);
+        // width: px2rem(153.75);
         font-size: px2rem(12);
-        @include ellipsis;
+        @include left
+        line-height: px2rem(14);
+        .slide-contents-book-author-text{
+        @include ellipsis2(1);
+        }
       }
     }
     .slide-contents-book-progress-wrapper{

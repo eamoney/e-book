@@ -1,6 +1,6 @@
 import { mapGetters, mapActions } from 'vuex'
 import { themeList, addCss, removeAllCss, getReadTimeByMinute } from './book.js'
-import { saveLocation } from './localStorage.js'
+import { saveLocation, getBookmark } from './localStorage.js'
 
 export const ebookMixin = {
   computed: {
@@ -27,6 +27,9 @@ export const ebookMixin = {
     ]),
     themeList () {
       return themeList(this)
+    },
+    getSectionName () {
+      return this.section ? this.navigation[this.section].label : ''
     }
   },
   methods: {
@@ -80,6 +83,16 @@ export const ebookMixin = {
           this.setSection(currentLocation.start.index)
         }
         saveLocation(this.fileName, startcfi)
+        const bookmark = getBookmark(this.fileName)
+        if (bookmark) {
+          if (bookmark.some(item => item.cfi === startcfi)) {
+            this.setIsBookmark(true)
+          } else {
+            this.setIsBookmark(false)
+          }
+        } else {
+          this.setIsBookmark(false)
+        }
       }
     },
     display (target, cb) {

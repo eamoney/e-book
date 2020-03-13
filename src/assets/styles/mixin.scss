@@ -1,4 +1,5 @@
 $ratio: 375 / 10;
+$clamp: 3;
 
 @function px2rem($px){
     @return $px / $ratio + rem;
@@ -27,6 +28,18 @@ $ratio: 375 / 10;
   overflow: hidden;
   white-space: nowrap;
 }
+
+@mixin ellipsis2($clamp) {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $clamp;
+  line-height: px2rem(16);
+  white-space: normal;
+  overflow: hidden;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  word-break: keep-all;
+}
+
 .icon{
   color:#333;
   font-size: px2rem(20);

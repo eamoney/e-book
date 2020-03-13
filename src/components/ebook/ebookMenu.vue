@@ -56,7 +56,7 @@ export default {
   &.hide-box-shadow{
     box-shadow: none;
   }
-  z-index:101;
+  z-index:161;
   position: absolute;
   bottom:0;
   left:0;

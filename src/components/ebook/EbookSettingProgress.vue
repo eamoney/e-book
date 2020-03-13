@@ -36,18 +36,6 @@ import { ebookMixin } from '../../utils/mixin.js'
 
 export default {
   mixins: [ebookMixin],
-  computed: {
-    getSectionName () {
-      // if (this.section) {
-      //   const sectionInfo = this.currentBook.section(this.section)
-      //   if (sectionInfo && sectionInfo.href && this.currentBook && this.currentBook.navigation) {
-      //     return this.currentBook.navigation.get(sectionInfo.href).label
-      //   }
-      // }
-      // return ''
-      return this.section ? this.navigation[this.section].label : ''
-    }
-  },
   methods: {
     onProgressChange (progress) {
       this.setProgress(progress).then(() => {
@@ -99,7 +87,7 @@ export default {
     position: absolute;
     bottom: px2rem(48);
     left: 0;
-    z-index: 100;
+    z-index: 160;
     width: 100%;
     height: px2rem(90);
     background: white;
