@@ -1,5 +1,7 @@
 $ratio: 375 / 10;
 $clamp: 3;
+$animationTime: .2s;
+$animationType: linear;
 
 @function px2rem($px){
     @return $px / $ratio + rem;
@@ -29,6 +31,20 @@ $clamp: 3;
   white-space: nowrap;
 }
 
+@mixin columnLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+@mixin columnRight {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}
+
 @mixin ellipsis2($clamp) {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: $clamp;
@@ -41,6 +57,12 @@ $clamp: 3;
 }
 
 .icon{
-  color:#333;
-  font-size: px2rem(20);
+  color:#666;
+  font-size: px2rem(16);
+}
+
+.title{
+  color:#666;
+  font-size: px2rem(16);
+  font-weight: bold;
 }

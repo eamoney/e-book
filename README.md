@@ -210,4 +210,9 @@ export function flatten (array) {
       }
     }
 
+书城首页：
+修改input的palcehold样式：       
+      &::-webkit-input-placeholder{
+        color: #ccc;
+      }
 

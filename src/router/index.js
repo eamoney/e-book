@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/ebook'
+    redirect: '/store/home'
   },
   {
     path: '/ebook',
@@ -15,6 +15,16 @@ const routes = [
       {
         path: ':fileName',
         component: () => import('../components/ebook/EbookReader.vue')
+      }
+    ]
+  },
+  {
+    path: '/store',
+    component: () => import('../views/store/index.vue'),
+    children: [
+      {
+        path: 'home',
+        component: () => import('../views/store/storeHome.vue')
       }
     ]
   }
