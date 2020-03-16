@@ -202,8 +202,7 @@ export function flatten (array) {
   --书签总共有4个状态
     处于第三状态时 需要将书签添加
     :style=" ifFixed ? fixedStyle : {}"
-        fixedStyle () {
-      return {
+        fixedStyle () {  
         position: 'fixed',
         top: 0,
         right: `${(window.innerWidth - this.$refs.bookmark.clientWidth) / 2}`
@@ -216,3 +215,41 @@ export function flatten (array) {
         color: #ccc;
       }
 
+      做旋转动画css样式部分的核心
+      transform-orgin 指定转动轴 backface-visibility 旋转到背面时进行隐藏
+
+烟花动画---keyframes动画
+
+scss的for循环：      &.animation {
+          @for $i from 1 to length($moves){
+            &:nth-child(#{$i}) {
+              @include move($i)
+            }
+          }
+        }
+
+        animation: flap-card-move .3s ease-in both;
+        --both是维持动画的主体 如果给主体加上sacle（0） 加上both会等动画做完再执行
+
+        使用mockjs
+        1.安装mockjs axios
+        2.引入mockjs import方式
+        3。MOck.mock（自定义路径名称，方法，引入的morcjs文件名称）
+        4.通过axios（）调用
+    
+export function home () {
+  return axios({
+    method: 'get',
+    url: `${process.env.VUE_APP_BASE_URL}/book/home`
+  })
+}
+
+
+    home().then(res => {
+      if (res && res.status === 200) {
+        const data = res.data
+        const randomIndex = Math.floor(Math.random() * data.random.length)
+        this.random = data.random[randomIndex]
+        console.log(this.random)
+      }
+    })

@@ -6,13 +6,15 @@ export const storeHomeMixin = {
   computed: {
     ...mapGetters([
       'offsetY',
-      'hotSearchOffsetY'
+      'hotSearchOffsetY',
+      'flapCardVisible'
     ])
   },
   methods: {
     ...mapActions([
       'setOffsetY',
-      'setHotSearchOffsetY'
+      'setHotSearchOffsetY',
+      'setFlapCardVisible'
     ])
   }
 }

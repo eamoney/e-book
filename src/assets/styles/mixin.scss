@@ -45,6 +45,13 @@ $animationType: linear;
   align-items: flex-end;
 }
 
+@mixin columnTop {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 @mixin ellipsis2($clamp) {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: $clamp;
@@ -56,6 +63,14 @@ $animationType: linear;
   word-break: keep-all;
 }
 
+@mixin absCenter {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  margin: auto;
+}
 .icon{
   color:#666;
   font-size: px2rem(16);

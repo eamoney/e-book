@@ -6,6 +6,7 @@ import './assets/styles/global.scss'
 import './assets/fonts/daysOne.css'
 import './assets/styles/icon.css'
 import i18n from './lang/index.js'
+import './mock/index.js'
 
 Vue.config.productionTip = false
 

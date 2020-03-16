@@ -8,12 +8,14 @@
           <span class="title-text title">{{$t('home.title')}}</span> 
         </div>
         <div class="title-icon-shake-wrapper">
-          <span class="icon-shake icon"></span> 
+          <span class="icon-shake icon" @click="showFlapCard"></span> 
         </div>
         </div>
       </transition>
 
-      <div class="title-icon-back-wrapper" :class="{'hide-title': !titleVisible}">
+      <div class="title-icon-back-wrapper" 
+           :class="{'hide-title': !titleVisible}"
+           @click="back">
         <span class="icon-back icon" ></span> 
       </div>
 
@@ -24,11 +26,12 @@
           <input type="text"
                  class="input"
                  :placeholder="$t('home.hint')"
-                 v-model="searchText">
+                 v-model="searchText"
+                 @click="showHotSearch">
         </div>
       </div>
     </div>
-    <hot-search-list/>
+    <hot-search-list v-show="hotSearchVisible" ref="hotSearch"></hot-search-list>
   </div>
 
 </template>
@@ -45,7 +48,8 @@ export default {
     return {
       searchText: '',
       titleVisible: true,
-      shadowVisible: false
+      shadowVisible: false,
+      hotSearchVisible: false
     }
   },
   watch: {
@@ -53,14 +57,51 @@ export default {
     offsetY (offsetY) {
       if (offsetY > 0){
         this.hideTitle()
-        this.showshadow()
+        this.showShadow()
       } else {
         this.showTitle()
+        this.hideShadow()
+      }
+    },
+    hotSearchOffsetY (offsetY) {
+      if (offsetY > 0) {
+        this.showShadow()
+      } else {
         this.hideShadow()
       }
     }
   },
   methods: {
+    showFlapCard () {
+      this.setFlapCardVisible(true)
+    },
+    back () {
+      this.hideHotSearch()
+      if (this.offsetY > 0) {
+        this.showShadow()
+      } else {
+        this.hideShadow()
+      }
+    },
+    hideHotSearch () {
+      this.hotSearchVisible = false
+      if (this.offsetY > 0) {
+        console.log(1)
+        this.hideTitle()
+        this.showShadow()
+      } else {
+        this.showTitle()
+        this.hideShadow()
+      }
+    },
+    showHotSearch () {
+      this.hotSearchVisible = true
+      this.hideTitle()
+      this.hideShadow()
+      this.$nextTick(() => {
+        this.$refs.hotSearch.reset()
+      })
+    },
     hideTitle () {
       this.titleVisible = false
     },
@@ -70,7 +111,7 @@ export default {
     hideShadow () {
       this.shadowVisible = false
     },
-    showshadow () {
+    showShadow () {
       this.shadowVisible = true
     }
   }
@@ -117,6 +158,7 @@ export default {
       height: px2rem(42);
       @include center;
       transition: height $animationTime $animationType;
+      z-index: 200;
       &.hide-title{
         height: px2rem(52);
         transition: height .2s linear;
