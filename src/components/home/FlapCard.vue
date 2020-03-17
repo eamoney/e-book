@@ -193,7 +193,6 @@ export default {
         this.runPointAnimation = false
       }, 750)
     },
-    showBookDetail () {},
     categoryText () {
       if (this.data) {
         categoryText(this.data.category, this)

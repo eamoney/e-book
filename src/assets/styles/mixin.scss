@@ -52,6 +52,19 @@ $animationType: linear;
   align-items: center;
 }
 
+@mixin top {
+  display: flex;
+  justify-items: center;
+  align-items: flex-start;
+}
+
+@mixin columnCenter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 @mixin ellipsis2($clamp) {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: $clamp;
