@@ -1,29 +1,32 @@
 import { mapGetters, mapActions } from 'vuex'
 import { themeList, addCss, removeAllCss, getReadTimeByMinute } from './book.js'
 import { saveLocation, getBookmark } from './localStorage.js'
+import { gotoBookDetail } from './store.js'
 
 export const storeHomeMixin = {
   computed: {
     ...mapGetters([
       'offsetY',
       'hotSearchOffsetY',
-      'flapCardVisible'
+      'flapCardVisible',
+      'isEditMode',
+      'shelfList',
+      'shelfSelected',
+      'shelfTitleVisible'
     ])
   },
   methods: {
     ...mapActions([
       'setOffsetY',
       'setHotSearchOffsetY',
-      'setFlapCardVisible'
+      'setFlapCardVisible',
+      'setIsEditMode',
+      'setShelfList',
+      'setShelfSelected',
+      'setShelfTitleVisible'
     ]),
     showBookDetail (book) {
-      this.$router.push({
-        path: '/store/detail',
-        query: {
-          fileName: book.fileName,
-          category: book.categoryText
-        }
-      })
+      gotoBookDetail(this, book)
     }
   }
 }
@@ -139,6 +142,30 @@ export const ebookMixin = {
     },
     getReadTimeText () {
       return this.$t('book.haveRead').replace('$1', getReadTimeByMinute(this.fileName))
+    }
+  }
+}
+
+export const storeShelfMixin = {
+  computed: {
+    ...mapGetters([
+      'offsetY',
+      'isEditMode',
+      'shelfList',
+      'shelfSelected',
+      'shelfTitleVisible'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'setOffsetY',
+      'setIsEditMode',
+      'setShelfList',
+      'setShelfSelected',
+      'setShelfTitleVisible'
+    ]),
+    showBookDetail (book) {
+      gotoBookDetail(this, book)
     }
   }
 }

@@ -29,7 +29,7 @@
           <div class="author sub-title-medium">{{data ? data.author : ''}}</div>
           <div class="category">{{categoryText()}}</div>
         </div>
-        <div class="read-btn" @click.stop="showBookDetail">{{$t('home.readNow')}}</div>
+        <div class="read-btn" @click.stop="goBookDetail">{{$t('home.readNow')}}</div>
       </div>
     </div>
     <div class="close-btn-wrapper" @click="close"> 
@@ -197,6 +197,10 @@ export default {
       if (this.data) {
         categoryText(this.data.category, this)
       }
+    },
+    goBookDetail () {
+      this.setFlapCardVisible(false)
+      this.showBookDetail(this.data)
     }
   },
   created () {

@@ -23,6 +23,10 @@ const routes = [
     component: () => import('../views/store/index.vue'),
     children: [
       {
+        path: 'shelf',
+        component: () => import('../../src/views/store/StoreShelf.vue')
+      },
+      {
         path: 'home',
         component: () => import('../views/store/StoreHome.vue')
       },
