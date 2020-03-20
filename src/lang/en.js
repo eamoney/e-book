@@ -44,6 +44,7 @@ const messages = {
     statistics: 'Statistics'
   },
   shelf: {
+    tips: 'please seletct at least one book',
     title: 'Book Shelf',
     edit: 'Edit',
     cancel: 'Cancel',

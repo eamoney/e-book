@@ -44,6 +44,7 @@ const messages = {
     statistics: '统计学'
   },
   shelf: {
+    tips: '请选择至少一本书',
     title: '书架',
     edit: '编辑',
     cancel: '取消',

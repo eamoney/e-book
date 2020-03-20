@@ -253,3 +253,64 @@ export function home () {
         console.log(this.random)
       }
     })
+
+    使用createApi       
+    this.$createToast({
+        $props: {
+          text: 'hello'
+        }
+      }).show()
+    使用vue全局mixin可以简化调用
+    Vue.mixin({
+    methods: {
+    toast (settings) {
+      return this.$createToast({
+        $props: settings
+      }).show()
+      }
+     }
+  })
+
+  使用vue transiton过度动画的时候 如果没有效果 可能是没有加上控制显示的条件
+  v-show
+
+      hide () {
+    //   通过这种方式控制 隐藏时的过度动画才可能生效
+      this.visible = false
+      this.setTimeout(() => {
+      this.popupVisible = false   
+      }, 200)
+    }
+
+  下载进度的实现：
+  定义下载方法：
+
+export function download (book, onSuccess, onError, onProgress) {
+  if (!onProgress) {
+    onProgress = onError
+  }
+  const url = `${process.env.VUE_APP_EPUB_URL}/${book.categoryText}/${book.fileName}.epub`
+  return axios.create({
+    method: 'get',
+    // 下载的电子书 是一个blob对象 这个需要定义
+    responseType: 'blob',
+    timeout: 180 * 1000,
+    // 定义进度相关事件 事件中的 loaded / total 就是当前下载的进度
+    onDownloadProgress: progressEvent => {
+      if (onProgress) onProgress(progressEvent)
+    }
+  }).get(url).then(res => {
+    if (onSuccess) onSuccess(res)
+  })
+}
+   调用：
+      return new Promise((resolve, reject) => {
+        download(book, (res) => {
+          console.log(res)
+        }, progressEvent => {
+          const progress = Math.floor(progressEvent.loaded / progressEvent.total * 100) + '%'
+          const text = this.$t('shelf.progressDownload')
+            .replace('$1', `${book.fileName}.epub(${progress})`)
+          console.log(text)
+        })
+      })

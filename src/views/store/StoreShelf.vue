@@ -3,9 +3,12 @@
     <shelf-title></shelf-title>
     <Scroll class="store-shelf-scroll-wrapper" 
             :top="0"
-            @onScroll="onScroll">
+            :bottom="srollBottom"
+            @onScroll="onScroll"
+            ref="scroll">
       <shelf-search></shelf-search>
       <shelf-list></shelf-list>
+      <shelf-foot></shelf-foot>
     </Scroll>
   </div>
 </template>
@@ -18,13 +21,29 @@ import { shelf } from '../../api/store.js'
 import { storeShelfMixin } from '../../utils/mixin.js'
 import ShelfList from '../../components/shelf/ShelfList.vue'
 import { appendAddToShelf } from '../../utils/store.js'
+import ShelfFoot from '../../components/shelf/ShelfFoot.vue'
 export default {
   mixins: [storeShelfMixin],
   components: {
     ShelfTitle,
     Scroll,
     ShelfSearch,
-    ShelfList
+    ShelfList,
+    ShelfFoot
+  },
+  watch: {
+    isEditMode (v) {
+      this.srollBottom = v ? 48 : 0
+      // 需要等所有dom响应完成之后调用 否则会不生效 
+      this.$nextTick(() => {
+        this.$refs.scroll.refresh()
+      })
+    }
+  },
+  data () {
+    return {
+      srollBottom: 0
+    }
   },
   methods: {
     getShelfList () {

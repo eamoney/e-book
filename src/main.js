@@ -6,6 +6,8 @@ import './assets/styles/global.scss'
 import './assets/fonts/daysOne.css'
 import './assets/styles/icon.css'
 import i18n from './lang/index.js'
+import './utils/boost.js'
+import './utils/create-api.js'
 // import './mock/index.js' 无法支持blob
 
 Vue.config.productionTip = false
