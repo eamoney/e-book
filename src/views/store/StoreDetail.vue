@@ -81,6 +81,8 @@ import Toast from '../../components/common/Toast'
 import { detail } from '../../api/store'
 import { px2rem, realPx } from '../../utils/utils'
 import Epub from 'epubjs'
+import { getLocalForage } from '../../utils/localForage'
+
 global.ePub = Epub
 export default {
   components: {
@@ -162,6 +164,26 @@ export default {
       })
     },
     trialListening () {
+      getLocalForage(this.bookItem.fileName, (err, blob) => {
+        if (!err && blob && blob instanceof blob) {
+          // 离线解析的方式
+          this.$router.push({
+            path: '/store/speaking',
+            query: {
+              fileName: this.bookItem.fileName
+            }
+          })
+        } else {
+          // 在线解析
+          this.$router.push({
+            path: '/store/speaking',
+            query: {
+              fileName: this.bookItem.fileName,
+              opf: this.opf
+            }
+          })
+        }
+      })
     },
     read (item) {
       this.$router.push({
