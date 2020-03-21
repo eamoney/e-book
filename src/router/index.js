@@ -27,6 +27,10 @@ const routes = [
         component: () => import('../../src/views/store/StoreShelf.vue')
       },
       {
+        path: 'category',
+        component: () => import('../views/store/ShelfCategory.vue')
+      },
+      {
         path: 'home',
         component: () => import('../views/store/StoreHome.vue')
       },

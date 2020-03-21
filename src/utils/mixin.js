@@ -1,7 +1,8 @@
 import { mapGetters, mapActions } from 'vuex'
 import { themeList, addCss, removeAllCss, getReadTimeByMinute } from './book.js'
-import { saveLocation, getBookmark } from './localStorage.js'
-import { gotoBookDetail } from './store.js'
+import { saveLocation, getBookmark, getBookShelf, saveBookShelf } from './localStorage.js'
+import { gotoBookDetail, appendAddToShelf, computedId, removeAddFromShelf } from './store.js'
+import { shelf } from '../api/store.js'
 
 export const storeHomeMixin = {
   computed: {
@@ -153,7 +154,9 @@ export const storeShelfMixin = {
       'isEditMode',
       'shelfList',
       'shelfSelected',
-      'shelfTitleVisible'
+      'shelfTitleVisible',
+      'shelfCategory',
+      'currentType'
     ])
   },
   methods: {
@@ -162,10 +165,51 @@ export const storeShelfMixin = {
       'setIsEditMode',
       'setShelfList',
       'setShelfSelected',
-      'setShelfTitleVisible'
+      'setShelfTitleVisible',
+      'setShelfCategory',
+      'setCurrentType'
     ]),
     showBookDetail (book) {
       gotoBookDetail(this, book)
+    },
+    getCategoryList (title) {
+      this.getShelfList().then(() => {
+        const categoryList = this.shelfList.filter(book => 
+          book.type === 2 && book.title === title)[0]
+        this.setShelfCategory(categoryList)
+      })
+    },
+    // 数据缓存
+    getShelfList () {
+      let shelfList = getBookShelf()
+      if (!shelfList) {
+        shelf().then(res => {
+          if (res.status === 200 && res.data && res.data.bookList){
+            console.log(res.data.bookList)
+            shelfList = appendAddToShelf(res.data.bookList)
+            saveBookShelf(shelfList)
+            return this.setShelfList(shelfList)
+          }
+        })
+      } else {
+        return this.setShelfList(shelfList)
+      }
+    },
+    // 删除 移除 分组
+    moveOutOfGroup (f) {
+      this.setShelfList(this.shelfList.map(book => {
+        if (book.type === 2 && book.itemList) {
+          book.itemList = book.itemList.filter(subBook => !subBook.selected)
+        }
+        return book
+      })).then(() => {
+        const list = computedId(appendAddToShelf([].concat(
+          removeAddFromShelf(this.shelfList), ...this.shelfSelected)))
+        this.setShelfList(list).then(() => {
+          this.simpleToast(this.$t('shelf.moveBookOutSuccess'))
+          if (f) f()
+        })
+      })
     }
   }
 }

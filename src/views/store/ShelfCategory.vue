@@ -1,21 +1,23 @@
 <template>
   <div class="store-shelf">
-    <shelf-title :title="$t('shelf.title')"></shelf-title>
+    <shelf-title :title="shelfCategory.title"></shelf-title>
     <Scroll class="store-shelf-scroll-wrapper" 
             :top="0"
             :bottom="srollBottom"
             @onScroll="onScroll"
-            ref="scroll">
-      <shelf-search></shelf-search>
-      <shelf-list :data="shelfList"></shelf-list>
+            ref="scroll"
+            v-if="shelfCategory.itemList && shelfCategory.itemList.length > 0">
+      <shelf-list :top="42" :data="shelfCategory.itemList"></shelf-list>
+      <shelf-foot></shelf-foot>
     </Scroll>
-    <shelf-foot></shelf-foot>
+    <div class="store-shelf-empty-view" v-else>
+        {{$t('shelf.groupNone')}}
+    </div>
   </div>
 </template>
 
 <script>
 import ShelfTitle from '../../components/shelf/ShelfTitle.vue'
-import ShelfSearch from '../../components/shelf/shelfSearch.vue'
 import Scroll from '../../components/common/Scroll.vue'
 import { storeShelfMixin } from '../../utils/mixin.js'
 import ShelfList from '../../components/shelf/ShelfList.vue'
@@ -26,7 +28,6 @@ export default {
   components: {
     ShelfTitle,
     Scroll,
-    ShelfSearch,
     ShelfList,
     ShelfFoot
   },
@@ -50,9 +51,9 @@ export default {
     }
   },
   mounted () {
-    this.getShelfList()
-    this.setShelfCategory([])
-    this.setCurrentType(1)
+    // 获取分类列表数据
+    this.getCategoryList(this.$route.query.title)
+    this.setCurrentType(2)
   }
 }
 </script>
@@ -72,6 +73,16 @@ export default {
    z-index: 101;
    width: 100%;
    height: 100%;
+ }
+ .store-shelf-empty-view {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   font-size: px2rem(14);
+   color: #333;
+   @include center;
  }
 }
 </style>

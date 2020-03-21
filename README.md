@@ -314,3 +314,21 @@ export function download (book, onSuccess, onError, onProgress) {
           console.log(text)
         })
       })
+
+  离线阅读功能：
+   getShelfList () {
+      let shelfList = getBookShelf()
+      if (!shelfList) {
+        shelf().then(res => {
+          if (res.status === 200 && res.data && res.data.bookList){
+            console.log(res.data.bookList)
+            shelfList = appendAddToShelf(res.data.bookList)
+            saveBookShelf(shelfList)
+            this.setShelfList(shelfList)
+          }
+        })
+      } else {
+        this.setShelfList(shelfList)
+      }
+    }
+    @click.prevent 在taost组件中加入禁止点击事件的方法 来阻止在taost显示过程中的点击操作

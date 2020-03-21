@@ -197,6 +197,19 @@ export function appendAddToShelf (list) {
   return list
 }
 
+export function computedId (list) {
+  return list.map((book, index) => {
+    if (book.type !== 3) {
+      book.id = index + 1
+      // 需要将子目录下的图书的id重新编排
+      if (book.itemList) {
+        book.itemList = computedId(book.itemList)
+      }
+    }
+    return book
+  })
+}
+
 export function removeAddFromShelf (list) {
   return list.filter(item => item.type !== 3)
 }

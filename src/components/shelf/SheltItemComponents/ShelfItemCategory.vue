@@ -1,11 +1,14 @@
 <template>
   <div class="shelf-item-category">
-     <div class="shelf-item-category-list">
+     <div class="shelf-item-category-list" v-if="data.itemList.length > 0">
        <div class="shelf-item-category-item"
             v-for="(item, index) in data.itemList"
             :key="index">
             <img :src="item.cover" class="shelf-item-category-img">
       </div>
+     </div>
+     <div class="shelf-item-category-bg" v-else>
+      <span class="icon-book2"></span>
      </div>
   </div>
 </template>
@@ -55,6 +58,13 @@ export default {
         height: 100%;
       }
     }
+  }
+  .shelf-item-category-bg{
+    width: 100%;
+    height: 100%;
+    @include center;
+    font-size: px2rem(14);
+    color: #ccc;
   }
 
 }

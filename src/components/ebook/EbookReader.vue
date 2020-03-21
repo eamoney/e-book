@@ -16,6 +16,7 @@
 import { ebookMixin } from '../../utils/mixin.js'
 import Epub from 'epubjs'
 import { flatten } from '../../utils/book.js'
+import { getLocalForage } from '../../utils/localForage.js'
 import { 
   getFontFamily,
   saveFontFamily,
@@ -199,9 +200,8 @@ export default {
         this.setNavigation(navItem)
       })  
     }, 
-    initEpub () {
+    initEpub (url) {
       // 根据fileName获取相应的url地址
-      const url = `${process.env.VUE_APP_RES_URL}/epub/` + this.fileName + '.epub'
       this.book = new Epub(url)
       console.log(url, this.book)
       this.setCurrentBook(this.book)
@@ -242,9 +242,20 @@ export default {
     }
   },
   mounted () {
-    const fileName = this.$route.params.fileName.split('|').join('/')
-    this.setFileName(fileName).then(() => {
-      this.initEpub()
+    const books = this.$route.params.fileName.split('|')
+    const bookName = books[1]
+    const fileName = books.join('/')
+    getLocalForage(bookName, (err, blob) => {
+      if (!err && blob) {
+        this.setFileName(fileName).then(() => {
+          this.initEpub(blob)
+        })
+      } else {
+        this.setFileName(fileName).then(() => {
+          const url = `${process.env.VUE_APP_RES_URL}/epub/` + this.fileName + '.epub'
+          this.initEpub(url)
+        }) 
+      }
     })
   }
 }
