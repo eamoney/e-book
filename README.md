@@ -332,3 +332,15 @@ export function download (book, onSuccess, onError, onProgress) {
       }
     }
     @click.prevent 在taost组件中加入禁止点击事件的方法 来阻止在taost显示过程中的点击操作
+
+
+    run bulid 时候 出现警告 有文件大小超出限制
+
+    需要在vue.config.js中配置：
+  configureWebpack: {
+    performance: {
+      hints: 'warning',
+      maxAssetSize: 524288,
+      maxEntrypointSize: 524288
+    }
+  }

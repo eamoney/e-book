@@ -179,7 +179,6 @@ export default {
       toast.continueShow()
       return new Promise((resolve, reject) => {
         download(book, book => {
-          console.log('下载完毕')
           toast.remove() // 这里不使用hide 使用createapi的remove直接移除
           // 回到上面的then
           resolve(book)

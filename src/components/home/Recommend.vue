@@ -28,7 +28,6 @@ export default {
   },
   methods: {
     showBookCategory () {
-      console.log(this.data)
     }
   }
 }

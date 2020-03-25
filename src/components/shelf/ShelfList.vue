@@ -56,6 +56,7 @@ export default {
   position: absolute;
   left: 0;
   z-index: 100;
+  width: 100%;
   #shelf-list{
     display: flex;
     padding: 0 px2rem(15) !important;

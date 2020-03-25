@@ -1,4 +1,4 @@
-import { getLocalStorage } from './localStorage'
+import { getLocalStorage, getBookShelf, saveBookShelf } from './localStorage'
 
 export function flatBookList (bookList) {
   if (bookList) {
@@ -262,5 +262,24 @@ export function gotoBookDetail (vue, book) {
       fileName: book.fileName,
       category: book.categoryText
     }
+  })
+}
+
+export function addToShelf (book) {
+  let shelfList = getBookShelf()
+  shelfList = removeAddFromShelf(shelfList)
+  book.type = 1
+  shelfList.push(book)
+  shelfList = computedId(shelfList)
+  shelfList = appendAddToShelf(shelfList)
+  saveBookShelf(shelfList)
+}
+
+export function removeFromBookShelf (book) {
+  return getBookShelf().filter(item => {
+    if (item.itemList) {
+      item.itemList = removeAddFromShelf(item.itemList)
+    }
+    return item.fileName !== book.fileName
   })
 }

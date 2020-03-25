@@ -185,7 +185,6 @@ export const storeShelfMixin = {
       if (!shelfList) {
         shelf().then(res => {
           if (res.status === 200 && res.data && res.data.bookList){
-            console.log(res.data.bookList)
             shelfList = appendAddToShelf(res.data.bookList)
             saveBookShelf(shelfList)
             return this.setShelfList(shelfList)

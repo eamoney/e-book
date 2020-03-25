@@ -203,7 +203,6 @@ export default {
     initEpub (url) {
       // 根据fileName获取相应的url地址
       this.book = new Epub(url)
-      console.log(url, this.book)
       this.setCurrentBook(this.book)
       this.initRendition()
       this.initGesture()
@@ -252,7 +251,7 @@ export default {
         })
       } else {
         this.setFileName(fileName).then(() => {
-          const url = `${process.env.VUE_APP_RES_URL}/epub/` + this.fileName + '.epub'
+          const url = `${process.env.VUE_APP_EPUB_URL}/` + this.fileName + '.epub'
           this.initEpub(url)
         }) 
       }

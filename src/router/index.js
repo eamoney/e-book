@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/store/home'
+    redirect: '/store/shelf'
   },
   {
     path: '/ebook',
